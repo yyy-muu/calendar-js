@@ -7,27 +7,28 @@ let month = commander.args[0];
 
 const today = new Date();
 
-function calender(month) {
+const calender = (month) => {
   const weekDays = "日 月 火 水 木 金 土";
   const year = today.getFullYear();
-  const firstDay = new Date(year, month - 1, 1);
-  const firstDate = firstDay.getDate();
-  const lastDate = new Date(year, month, 0).getDate();
-  let weekDayFirstDate = firstDay.getDay(); // 月初日の曜日を整数で取得
-  let dateCounter = weekDayFirstDate; // 月初日の曜日の整数値を、日付出力のループ処理の初期値とする
+  const startDate = new Date(year, month - 1, 1);
+  const endDate = new Date(year, month, 0);
+  let startDayOfMonth = startDate.getDay(); // 月初日の曜日を整数で取得
 
-  console.log("     " + month + "月" + " " + year + "    ");
+  console.log(`     ${month}月 ${year}年`);
   console.log(weekDays);
-  process.stdout.write("   ".repeat(weekDayFirstDate)); // 月初日の曜日の整数値に応じて空白を出力
+  process.stdout.write("   ".repeat(startDayOfMonth)); // 月初日の曜日の整数値に応じて空白を出力
 
   // 1日〜月末日までを出力
-  for (let i = 1; i < lastDate + 1; i++) {
-    process.stdout.write(i.toString().padStart(2) + " "); // 月初日の曜日(整数値)に1ずつ加算
-    dateCounter++;
-    if (dateCounter % 7 === 0) console.log(""); // 土曜日(7の倍数)に達したら改行
+  for (
+    let date = startDate;
+    date <= endDate;
+    date.setDate(date.getDate() + 1) // 1日ずつ増し上げ
+  ) {
+    process.stdout.write(date.getDate().toString().padStart(2) + " ");
+    if (date.getDay() === 6) console.log(""); // 土曜日に達したら改行
   }
   console.log("");
-}
+};
 
 // コマンドライン引数未指定の場合
 if (month === undefined) {
